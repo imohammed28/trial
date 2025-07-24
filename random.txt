@@ -12,3 +12,29 @@ if not is_angry and msg_count < KAREN_THRESHOLD:
 # Or more simply, replace the entire if block with:
 if not is_angry and msg_count >= 4 and msg_count < KAREN_THRESHOLD:
     bonus_message = "Hmm, that didn't sound angry enough. Are you angry? Real Karens use more CAPS and exclamation marks!!!"
+
+
+
+
+/* ADD THIS TO UserContactUs.css */
+
+.rate-limit-warning {
+    background-color: #fff3cd;
+    border: 2px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+    color: #856404;
+    font-weight: bold;
+    animation: shake 0.5s ease-in-out;
+    text-align: center;
+    font-size: 14px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* No CSS additions needed for ContactUs.css since the rate limit message uses the existing <p> tag styling */
