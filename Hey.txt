@@ -1,0 +1,188 @@
+<!-- HTML for the button -->
+<button class="reset-button" id="resetBtn">
+    <div class="db-icon"></div>
+    Reset DB
+</button>
+
+<!-- CSS Styles -->
+<style>
+/* Reset Button Styles */
+.reset-button {
+    position: relative;
+    background: linear-gradient(145deg, #D2001F, #8B1538);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 4px 15px rgba(139, 21, 56, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 160px;
+    justify-content: center;
+}
+
+.reset-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.8s ease;
+}
+
+.reset-button:hover::before {
+    left: 100%;
+}
+
+.reset-button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 8px 25px rgba(139, 21, 56, 0.6),
+        0 0 30px rgba(210, 0, 31, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.reset-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 
+        0 2px 10px rgba(139, 21, 56, 0.8),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Database Icon */
+.db-icon {
+    width: 18px;
+    height: 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s ease;
+}
+
+.db-icon::before,
+.db-icon::after {
+    content: '';
+    width: 18px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.db-icon::before {
+    top: 0;
+    box-shadow: 0 6px 0 currentColor, 0 12px 0 currentColor;
+}
+
+.db-icon::after {
+    top: 2px;
+    width: 16px;
+    height: 10px;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.reset-button:hover .db-icon {
+    animation: dbSpin 0.8s ease-in-out;
+}
+
+@keyframes dbSpin {
+    0%, 100% { transform: rotateY(0deg); }
+    50% { transform: rotateY(180deg); }
+}
+
+/* Loading state */
+.reset-button.loading {
+    pointer-events: none;
+    background: linear-gradient(145deg, #666, #444);
+}
+
+.reset-button.loading .db-icon {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Success state */
+.reset-button.success {
+    background: linear-gradient(145deg, #28a745, #20c997);
+    animation: successPulse 0.6s ease;
+}
+
+@keyframes successPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Ripple effect animation */
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+
+<!-- JavaScript for functionality -->
+<script>
+document.getElementById('resetBtn').addEventListener('click', function() {
+    const btn = this;
+    
+    // Add loading state
+    btn.classList.add('loading');
+    btn.innerHTML = '<div class="db-icon"></div>Resetting...';
+    
+    // Here you would make your actual database reset API call
+    // For demo purposes, we'll simulate it with setTimeout
+    setTimeout(() => {
+        btn.classList.remove('loading');
+        btn.classList.add('success');
+        btn.innerHTML = '<div class="db-icon"></div>Complete!';
+        
+        // Reset to normal after 2 seconds
+        setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = '<div class="db-icon"></div>Reset DB';
+        }, 2000);
+    }, 2000);
+    
+    // Add ripple effect
+    const ripple = document.createElement('div');
+    ripple.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+    `;
+    
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+    
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+});
+</script>
